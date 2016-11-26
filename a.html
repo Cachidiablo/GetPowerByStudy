@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+
+
+
+<script>
+
+
+function clickBtn(){
+	var inputs=document.getElementsByTagName("input");
+	var ppp=document.getElementById("ppp");
+	ppp.innerHTML="";
+	var texts=[];
+	var checkboxs=[];
+	var textValue=[];
+	var checkboxValue=[];
+	var allValue=[];
+
+	for(var i=0;i<inputs.length;i++){
+		if(inputs[i].type=="text"){
+			texts.push(inputs[i]);
+		}
+		else if(inputs[i].type=="checkbox"){
+			checkboxs.push(inputs[i]);
+		}
+	}
+
+	for(var i=0;i<texts.length;i++){
+		textValue[i]=texts[i].value;
+	}
+	for(var i=0;i<checkboxs.length;i++){
+		if(checkboxs[i].checked==true){
+			checkboxValue[i]=checkboxs[i].value;
+		}
+		else{
+			checkboxValue[i]="";
+		}
+	}
+
+	for(var i=0;i<(textValue.length>checkboxValue.length?checkboxValue.length:textValue.length);i++){
+		if(textValue[i]!=""&&checkboxValue[i]!=""){
+			allValue[i]="这是第"+(i+1)+"组元素,输入的是:"+textValue[i]+"；选择的是:"+checkboxValue[i];
+		}
+	}
+
+	for(var i=0;i<allValue.length;i++){
+		if(allValue[i]){
+			var newNode=document.createElement("p");
+			newNode.innerHTML=allValue[i];
+			ppp.appendChild(newNode);
+		}
+	}
+
+}
+
+
+</script>
+
+<body>
+	
+<div id="input1">
+	1.<input type="text" />
+	2.<input type="text" />
+	3.<input type="text" />
+</div>
+
+<div id="checkbox2">
+	<input type="checkbox" value="checkbox111">	这是第一个	
+	<input type="checkbox" value="checkbox222"> 这是第二个
+	<input type="checkbox" value="">	这是第三个	
+	<input type="checkbox" value="checkbox444"> 这是第四个
+</div>
+
+<input type="button" value="按我" onclick="clickBtn()">
+
+<div id="ppp">
+</div>
+
+</body>
+</html>
