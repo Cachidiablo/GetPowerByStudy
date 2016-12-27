@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>星空不重叠效果</title>
+</head>
+<style>
+#canvas{border: 1px red solid;display: block;margin:0 auto;}
+</style>
+<body>
+	<canvas id="canvas"></canvas>
+	<script>
+
+	window.onload=function(){
+		var canvas=document.getElementById("canvas")
+		canvas.width=800;
+		canvas.height=800;
+		var cxt=canvas.getContext("2d");
+
+		cxt.fillStyle="#000000";
+		//注意，这里是canvas.width和height,画布的宽和高！而非上下文内容cxt
+		cxt.fillRect(0,0,canvas.width,canvas.height);
+		cxt.fill();
+
+		//[{x:num,y:num,r:num},{x:num,y:num,r:num}]
+		var stars=[];
+		for(var i=0;i<200;i++){
+			var r=Math.random()*10+10;
+			//让星星都在画布内
+			//即中心点范围 R ~ canvas.width/height-R
+			var x=Math.random()*(canvas.width-2*r)+r;
+			var y=Math.random()*(canvas.height-2*r)+r;
+
+			var close=false;
+			for(var j=0;j<stars.length;j++){
+				var R=Math.pow(Math.abs(stars[j].x-x),2)+Math.pow(Math.abs(stars[j].y-y),2)
+				if(R<Math.pow(r+stars[j].r,2)){
+					close=true;
+					//如果使用return语句则跳出函数，一旦遇到一个重合的星星立刻结束绘制
+					//return;
+				}
+			}
+			
+			if(close==true){
+				continue;
+			}
+			
+			var star={x:x,y:y,r:r};
+			stars.push(star);
+			var rot=Math.random()*72;
+			drawStar(cxt,x,y,r,r/2,rot);
+		}
+		//console.log(stars);
+
+	}
+
+	//画一个五角星
+	//画布，偏移x，偏移y,外圈半径，内圈半径，旋转角度
+	function drawStar(cxt,x,y,R,r,rot){
+		cxt.beginPath();
+		for(var i=0;i<5;i++){
+			cxt.lineTo(Math.cos((18+i*72+rot)/180*Math.PI)*R+x,-Math.sin((18+i*72+rot)/180*Math.PI)*R+y);
+			cxt.lineTo(Math.cos((54+i*72+rot)/180*Math.PI)*r+x,-Math.sin((54+i*72+rot)/180*Math.PI)*r+y);
+		}
+		cxt.closePath();
+		cxt.fillStyle="#FFEB3B";
+		cxt.lineWidth=3;
+		cxt.strokeStyle="#FFC107";
+		cxt.lineJoin="round";
+
+		cxt.fill();
+		cxt.stroke();
+	}
+
+	</script>
+</body>
+</html>
